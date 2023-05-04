@@ -15,7 +15,7 @@ export const AuthButtons = ({ callbackUrl = '/' }: AuthButtonsProps) => {
 
   return (
     <Container>
-      <AuthButton>
+      <AuthButton onClick={() => handleSignIn('google')}>
         <img src="/images/icons/google.svg" alt="Google Logo" />
         Entrar com Google
       </AuthButton>
