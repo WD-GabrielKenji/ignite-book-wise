@@ -1,6 +1,18 @@
+import { signIn } from 'next-auth/react'
+
 import { AuthButton, Container } from './styles'
 
-export const AuthButtons = () => {
+type AuthButtonsProps = {
+  callbackUrl?: string
+}
+
+export const AuthButtons = ({ callbackUrl = '/' }: AuthButtonsProps) => {
+  const handleSignIn = (provider?: string) => {
+    signIn(provider, {
+      callbackUrl,
+    })
+  }
+
   return (
     <Container>
       <AuthButton>
@@ -8,7 +20,7 @@ export const AuthButtons = () => {
         Entrar com Google
       </AuthButton>
 
-      <AuthButton>
+      <AuthButton onClick={() => handleSignIn('github')}>
         <img src="/images/icons/github.svg" alt="Github Logo" />
         Entrar com Github
       </AuthButton>
