@@ -9,6 +9,7 @@
     "lint": "npx eslint src --ext .ts,.tsx"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.0.9",
     "@prisma/client": "^4.13.0",
     "@stitches/react": "^1.2.8",
     "@types/node": "18.16.3",
