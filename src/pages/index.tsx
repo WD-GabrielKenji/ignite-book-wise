@@ -3,6 +3,7 @@ import { ReactElement } from 'react'
 
 import { DefaultLayout } from '@/layout/DefaultLayout'
 import { LatestRatings } from '@/components/LatestRatings'
+import { PopularBooks } from '@/components/PopularBooks'
 
 import { HomeContainer } from '@/styles/pages/home'
 
@@ -10,6 +11,7 @@ const HomePage: NextPageWithLayout = () => {
   return (
     <HomeContainer>
       <LatestRatings />
+      <PopularBooks />
     </HomeContainer>
   )
 }
