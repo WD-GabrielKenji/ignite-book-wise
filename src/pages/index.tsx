@@ -1,13 +1,17 @@
 import { NextPageWithLayout } from './_app'
 import { ReactElement } from 'react'
-import { useSession } from 'next-auth/react'
 
 import { DefaultLayout } from '@/layout/DefaultLayout'
+import { LatestRatings } from '@/components/LatestRatings'
+
+import { HomeContainer } from '@/styles/pages/home'
 
 const HomePage: NextPageWithLayout = () => {
-  const { data } = useSession()
-
-  return <pre>{JSON.stringify(data, null, 2)}</pre>
+  return (
+    <HomeContainer>
+      <LatestRatings />
+    </HomeContainer>
+  )
 }
 
 HomePage.getLayout = (page: ReactElement) => {
