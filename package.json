@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "npx eslint src --ext .ts,.tsx"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "dependencies": {
     "@phosphor-icons/react": "^2.0.9",
     "@prisma/client": "^4.13.0",
@@ -24,7 +27,10 @@
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.2.0",
+    "@types/uuid": "^9.0.1",
     "eslint": "^8.39.0",
-    "prisma": "^4.13.0"
+    "prisma": "^4.13.0",
+    "ts-node": "^10.9.1",
+    "uuid": "^9.0.0"
   }
 }
