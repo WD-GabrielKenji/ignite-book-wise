@@ -1,6 +1,9 @@
 import { ReactElement, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 import { NextPageWithLayout } from './_app'
+import { Category } from '@prisma/client'
+import { api } from '@/lib/axios'
 import { DefaultLayout } from '@/layout/DefaultLayout'
 import { PageTitle } from '@/components/ui/PageTitle'
 import { Input } from '@/components/ui/Form/Input'
@@ -12,6 +15,14 @@ import { ExploreContainer, TagsContainer } from '@/styles/pages/explorar'
 const ExplorePage: NextPageWithLayout = () => {
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
+  const { data: categories } = useQuery<Category[]>(
+    ['categories'],
+    async () => {
+      const { data } = await api.get('/books/categories')
+      return data?.categories ?? []
+    },
+  )
 
   return (
     <ExploreContainer>
@@ -36,7 +47,15 @@ const ExplorePage: NextPageWithLayout = () => {
         >
           Tudo
         </Tag>
-        <Tag>Computação</Tag>
+        {categories?.map((category, i) => (
+          <Tag
+            key={category?.id}
+            active={selectedCategory === category.id}
+            onClick={() => setSelectedCategory(category.id)}
+          >
+            {category?.name}
+          </Tag>
+        ))}
       </TagsContainer>
     </ExploreContainer>
   )
