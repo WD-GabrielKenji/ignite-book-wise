@@ -1,4 +1,10 @@
-import { ReactNode } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { ReactNode, useState } from 'react'
+
+import { BookWithAvgRating } from '../BookCard'
+import { RatingWithAuthor } from '../UserRatingCard'
+import { CategoriesOnBooks, Category } from '@prisma/client'
+import { api } from '@/lib/axios'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Heading, Text } from '../Typography'
 import { RatingStars } from '../PopularBooks/RatingStars'
@@ -17,13 +23,39 @@ import {
   DialogOverlay,
 } from './styles'
 
+type BookDetails = BookWithAvgRating & {
+  ratings: RatingWithAuthor[]
+  categories: (CategoriesOnBooks & {
+    category: Category
+  })[]
+}
+
 type RatingsDialogProps = {
+  bookId: string
   children: ReactNode
 }
 
-export const RatingsDialog = ({ children }: RatingsDialogProps) => {
+export const RatingsDialog = ({ bookId, children }: RatingsDialogProps) => {
+  const [open, setOpen] = useState(false)
+
+  const { data: book } = useQuery<BookDetails>(
+    ['book', bookId],
+    async () => {
+      const { data } = await api.get(`/books/details/${bookId}`)
+      return data.book ?? {}
+    },
+    {
+      enabled: open,
+    },
+  )
+
+  const ratingsLength = book?.ratings?.length ?? 0
+
+  const categories =
+    book?.categories?.map((x) => x?.category?.name)?.join(', ') ?? ''
+
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>{children}</Dialog.Trigger>
 
       <Dialog.Portal>
@@ -34,43 +66,57 @@ export const RatingsDialog = ({ children }: RatingsDialogProps) => {
             <X size={24} />
           </DialogClose>
 
-          <BookDetailsWrapper>
-            <BookDetailsContainer>
-              <BookImage
-                width={171}
-                height={242}
-                alt="Book Name"
-                src="http://github.com/WD-GabrielKenji.png"
-              />
+          {!book ? (
+            <p>Carregando...</p>
+          ) : (
+            <>
+              <BookDetailsWrapper>
+                <BookDetailsContainer>
+                  <BookImage
+                    width={171}
+                    height={242}
+                    alt={book.name}
+                    src={book.cover_url}
+                  />
+                  <BookContent>
+                    <div>
+                      <Heading size="sm">{book.name}</Heading>
+                      <Text color="gray-300" css={{ marginTop: '$2' }}>
+                        {book.author}
+                      </Text>
+                    </div>
 
-              <BookContent>
-                <div>
-                  <Heading size="sm">Titulo</Heading>
-                  <Text color="gray-300" css={{ marginTop: '$2' }}>
-                    Autor
-                  </Text>
-                </div>
+                    <div>
+                      <RatingStars rating={book.avgRating} size="md" />
+                      <Text
+                        color="gray-400"
+                        size="sm"
+                        css={{ marginTop: '$1' }}
+                      >
+                        {ratingsLength}{' '}
+                        {ratingsLength === 1 ? 'avaliação' : 'avaliações'}
+                      </Text>
+                    </div>
+                  </BookContent>
+                </BookDetailsContainer>
 
-                <div>
-                  <RatingStars rating={4} size="md" />
-                  <Text color="gray-400" size="sm" css={{ marginTop: '$1' }}>
-                    2 avaliações
-                  </Text>
-                </div>
-              </BookContent>
-            </BookDetailsContainer>
+                <BookInfos>
+                  <BookInfo
+                    icon={<BookmarkSimple />}
+                    title="Categorias"
+                    info={categories}
+                  />
+                  <BookInfo
+                    icon={<BookOpen />}
+                    title="Páginas"
+                    info={String(book.total_pages)}
+                  />
+                </BookInfos>
+              </BookDetailsWrapper>
 
-            <BookInfos>
-              <BookInfo
-                icon={<BookmarkSimple />}
-                title="Categorias"
-                info="Ficção, Ação"
-              />
-              <BookInfo icon={<BookOpen />} title="Páginas" info="217" />
-            </BookInfos>
-          </BookDetailsWrapper>
-
-          <BookRatings />
+              <BookRatings ratings={book.ratings} />
+            </>
+          )}
         </DialogContent>
       </Dialog.Portal>
     </Dialog.Root>

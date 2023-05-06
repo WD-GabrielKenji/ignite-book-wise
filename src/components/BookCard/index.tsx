@@ -34,7 +34,7 @@ export const BookCard = ({ book, size = 'md' }: BookCardProps) => {
   }
 
   return (
-    <RatingsDialog>
+    <RatingsDialog bookId={book?.id}>
       <Container>
         {book?.alreadyRead && <ReadBadge>LIDO</ReadBadge>}
 
