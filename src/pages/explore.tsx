@@ -8,9 +8,14 @@ import { DefaultLayout } from '@/layout/DefaultLayout'
 import { PageTitle } from '@/components/ui/PageTitle'
 import { Input } from '@/components/ui/Form/Input'
 import { Tag } from '@/components/ui/Tag'
+import { BookCard, BookWithAvgRating } from '@/components/BookCard'
 
 import { Binoculars, MagnifyingGlass } from '@phosphor-icons/react'
-import { ExploreContainer, TagsContainer } from '@/styles/pages/explorar'
+import {
+  BooksGrid,
+  ExploreContainer,
+  TagsContainer,
+} from '@/styles/pages/explorar'
 
 const ExplorePage: NextPageWithLayout = () => {
   const [search, setSearch] = useState('')
@@ -23,6 +28,25 @@ const ExplorePage: NextPageWithLayout = () => {
       return data?.categories ?? []
     },
   )
+
+  const { data: books } = useQuery<BookWithAvgRating[]>(
+    ['books', selectedCategory],
+    async () => {
+      const { data } = await api.get('/books', {
+        params: {
+          category: selectedCategory,
+        },
+      })
+      return data?.books ?? []
+    },
+  )
+
+  const filteredBooks = books?.filter((book) => {
+    return (
+      book.name.toLowerCase().includes(search.toLowerCase()) ||
+      book.author.toLowerCase().includes(search.toLowerCase())
+    )
+  })
 
   return (
     <ExploreContainer>
@@ -57,6 +81,12 @@ const ExplorePage: NextPageWithLayout = () => {
           </Tag>
         ))}
       </TagsContainer>
+
+      <BooksGrid>
+        {filteredBooks?.map((book) => (
+          <BookCard key={book.id} size="lg" book={book} />
+        ))}
+      </BooksGrid>
     </ExploreContainer>
   )
 }

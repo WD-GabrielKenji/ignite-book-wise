@@ -20,6 +20,19 @@ export const Container = styled('div', {
   },
 })
 
+export const ReadBadge = styled('span', {
+  display: 'block',
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  padding: '$1 $3',
+  borderRadius: '0px 4px 0px 4px',
+  background: '#0A313C',
+  color: '$green100',
+  fontSize: '$xs',
+  fontWeight: '$bold',
+})
+
 export const BookImage = styled(Image, {
   borderRadius: 4,
   objectFit: 'cover',

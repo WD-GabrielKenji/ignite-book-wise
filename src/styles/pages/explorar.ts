@@ -20,3 +20,17 @@ export const TagsContainer = styled('div', {
   marginTop: 40,
   marginBottom: 48,
 })
+
+export const BooksGrid = styled('div', {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(3, 1fr)',
+  gridAutoRows: 188,
+  gap: '$5',
+  height: '100%',
+  paddingBottom: 40,
+  overflowY: 'auto',
+
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  },
+})
