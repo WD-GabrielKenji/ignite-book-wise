@@ -1,6 +1,7 @@
 import { Book } from '@prisma/client'
 import { Text } from '../Typography'
 import { RatingStars } from '../PopularBooks/RatingStars'
+import { RatingsDialog } from '../RatingsDialog'
 
 import {
   BookDetails,
@@ -33,26 +34,28 @@ export const BookCard = ({ book, size = 'md' }: BookCardProps) => {
   }
 
   return (
-    <Container>
-      {book?.alreadyRead && <ReadBadge>LIDO</ReadBadge>}
+    <RatingsDialog>
+      <Container>
+        {book?.alreadyRead && <ReadBadge>LIDO</ReadBadge>}
 
-      <BookImage
-        width={IMAGE_SIZES[size].width}
-        height={IMAGE_SIZES[size].height}
-        css={{ minWidth: IMAGE_SIZES[size].width }}
-        alt={book.name}
-        src={book.cover_url}
-      />
-      <BookDetails>
-        <div>
-          <BookName size="xs">{book.name}</BookName>
-          <Text size="sm" color="gray-400">
-            {book.author}
-          </Text>
-        </div>
+        <BookImage
+          width={IMAGE_SIZES[size].width}
+          height={IMAGE_SIZES[size].height}
+          css={{ minWidth: IMAGE_SIZES[size].width }}
+          alt={book.name}
+          src={book.cover_url}
+        />
+        <BookDetails>
+          <div>
+            <BookName size="xs">{book.name}</BookName>
+            <Text size="sm" color="gray-400">
+              {book.author}
+            </Text>
+          </div>
 
-        <RatingStars rating={book.avgRating} />
-      </BookDetails>
-    </Container>
+          <RatingStars rating={book.avgRating} />
+        </BookDetails>
+      </Container>
+    </RatingsDialog>
   )
 }
