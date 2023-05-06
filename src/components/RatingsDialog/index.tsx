@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Heading, Text } from '../Typography'
 import { RatingStars } from '../PopularBooks/RatingStars'
 import { BookInfo } from './BookInfo'
+import { BookRatings } from '../BookRatings'
 
 import { BookOpen, BookmarkSimple, X } from '@phosphor-icons/react'
 import {
@@ -68,6 +69,8 @@ export const RatingsDialog = ({ children }: RatingsDialogProps) => {
               <BookInfo icon={<BookOpen />} title="Páginas" info="217" />
             </BookInfos>
           </BookDetailsWrapper>
+
+          <BookRatings />
         </DialogContent>
       </Dialog.Portal>
     </Dialog.Root>
