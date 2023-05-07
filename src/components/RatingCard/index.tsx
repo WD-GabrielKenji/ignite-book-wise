@@ -10,6 +10,7 @@ import {
   BookContent,
   BookDetails,
   BookImage,
+  CompactDetails,
   Container,
   ToggleShowMoreButton,
   UserDetails,
@@ -22,11 +23,15 @@ export type RatingWithAuthorAndBook = Rating & {
 
 type RatingCardProps = {
   rating: RatingWithAuthorAndBook
+  variant?: 'default' | 'compact'
 }
 
 const MAX_SUMMARY_LENGTH = 180
 
-export const RatingCard = ({ rating }: RatingCardProps) => {
+export const RatingCard = ({
+  rating,
+  variant = 'default',
+}: RatingCardProps) => {
   const distance = getRelativeTimeString(new Date(rating.created_at), 'pt-BR')
 
   const {
@@ -37,21 +42,22 @@ export const RatingCard = ({ rating }: RatingCardProps) => {
 
   return (
     <Container>
-      <UserDetails>
-        <section>
-          <Link href={`/profile/${rating.user_id}`}>
-            <Avatar src={rating.user.avatar_url!} alt={rating.user.name} />
-          </Link>
-          <div>
-            <Text>{rating.user.name}</Text>
-            <Text size="sm" color="gray-400">
-              {distance}
-            </Text>
-          </div>
-        </section>
-
-        <RatingStars rating={rating.rate} />
-      </UserDetails>
+      {variant === 'default' && (
+        <UserDetails>
+          <section>
+            <Link href={`/profile/${rating.user_id}`}>
+              <Avatar src={rating.user.avatar_url!} alt={rating.user.name} />
+            </Link>
+            <div>
+              <Text>{rating.user.name}</Text>
+              <Text size="sm" color="gray-400">
+                {distance}
+              </Text>
+            </div>
+          </section>
+          <RatingStars rating={rating.rate} />
+        </UserDetails>
+      )}
 
       <BookDetails>
         <Link
@@ -68,6 +74,15 @@ export const RatingCard = ({ rating }: RatingCardProps) => {
 
         <BookContent>
           <div>
+            {variant === 'compact' && (
+              <CompactDetails>
+                <Text size="sm" color="gray-300">
+                  {distance}
+                </Text>
+
+                <RatingStars rating={rating.rate} />
+              </CompactDetails>
+            )}
             <Heading size="xs">{rating.book.name}</Heading>
             <Text size="sm" color="gray-400">
               {rating.book.author}
