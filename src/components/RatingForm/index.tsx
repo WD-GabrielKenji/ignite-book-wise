@@ -1,6 +1,8 @@
 import { useSession } from 'next-auth/react'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { api } from '@/lib/axios'
 import { Heading } from '../Typography'
 import { Avatar } from '../ui/Avatar'
 import { TextArea } from '../ui/Form/TextArea'
@@ -28,7 +30,31 @@ export const RatingForm = ({ bookId, onCancel }: RatingFormProps) => {
   const [description, setDescription] = useState('')
   const [currentRate, setCurrentRate] = useState(0)
 
+  const queryClient = useQueryClient()
+
+  const { mutateAsync: handleRate } = useMutation(
+    async () => {
+      await api.post(`/books/${bookId}/rate`, {
+        description,
+        rate: currentRate,
+      })
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['book', bookId])
+        queryClient.invalidateQueries(['books'])
+        onCancel()
+      },
+    },
+  )
+
   const submitDisabled = !description.trim() || !currentRate
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault()
+    if (submitDisabled) return
+    await handleRate()
+  }
 
   return (
     <Container>
@@ -39,11 +65,15 @@ export const RatingForm = ({ bookId, onCancel }: RatingFormProps) => {
             <Heading size="xs">{user.name}</Heading>
           </section>
 
-          <RatingStars size="lg" rating={currentRate} />
+          <RatingStars
+            size="lg"
+            rating={currentRate}
+            setRating={setCurrentRate}
+          />
         </UserDetails>
       )}
 
-      <FormContainer>
+      <FormContainer onSubmit={handleSubmit}>
         <TextArea
           placeholder="Escreva sua avaliação"
           maxLength={450}
