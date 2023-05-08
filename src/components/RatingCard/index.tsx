@@ -41,7 +41,7 @@ export const RatingCard = ({
   } = useToggleShowMore(rating.book.summary, MAX_SUMMARY_LENGTH)
 
   return (
-    <Container>
+    <Container variant={variant}>
       {variant === 'default' && (
         <UserDetails>
           <section>
@@ -58,7 +58,6 @@ export const RatingCard = ({
           <RatingStars rating={rating.rate} />
         </UserDetails>
       )}
-
       <BookDetails>
         <Link
           style={{ display: 'flex' }}
@@ -93,7 +92,7 @@ export const RatingCard = ({
             size="sm"
             color="gray-300"
             css={{
-              marginTop: '$5',
+              marginTop: variant === 'compact' ? 'auto' : '$5',
             }}
           >
             {bookSummary}

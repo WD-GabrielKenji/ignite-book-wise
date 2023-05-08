@@ -5,7 +5,7 @@ const nextConfig = {
     domains: [
       'lh3.googleusercontent.com',
       'avatars.githubusercontent.com',
-      'github.com',
+      's3-alpha-sig.figma.com',
       'images.unsplash.com',
     ],
   },
