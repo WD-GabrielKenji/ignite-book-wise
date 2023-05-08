@@ -17,7 +17,7 @@ const HomePage: NextPageWithLayout = () => {
 }
 
 HomePage.getLayout = (page: ReactElement) => {
-  return <DefaultLayout>{page}</DefaultLayout>
+  return <DefaultLayout title="Início">{page}</DefaultLayout>
 }
 
 export default HomePage

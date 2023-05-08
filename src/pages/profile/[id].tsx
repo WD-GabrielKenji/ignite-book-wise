@@ -61,7 +61,7 @@ const ProfilePage: NextPageWithLayout = () => {
 }
 
 ProfilePage.getLayout = (page: ReactElement) => {
-  return <DefaultLayout>{page}</DefaultLayout>
+  return <DefaultLayout title="Perfil">{page}</DefaultLayout>
 }
 
 export default ProfilePage
