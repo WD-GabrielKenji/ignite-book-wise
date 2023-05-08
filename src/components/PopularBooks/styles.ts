@@ -5,7 +5,7 @@ export const Container = styled('div', {
   flexDirection: 'column',
   gap: '$4',
   width: '100%',
-  marginTop: 40,
+  marginTop: 68,
 
   header: {
     display: 'flex',
